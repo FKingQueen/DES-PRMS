@@ -12,20 +12,30 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
+        // return $request;
         $request->validate([
-            'email' => 'required|email',
+            'username' => 'required|username',
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        if (Auth::attempt($request->only('username', 'password'))) {
             $user = Auth::user();
             $token = $user->createToken('auth-token')->plainTextToken;
 
             return response()->json(['user' => $user, 'token' => $token]);
         }
+        // Check if the username exists in the database
+        $user = User::where('username', $request->username)->first();
 
+        if (!$user) {
+            throw ValidationException::withMessages([
+                'error' => ['Username not found.'],
+            ]);
+        }
+
+        // If Auth::attempt fails due to incorrect password, return an error message
         throw ValidationException::withMessages([
-            'email' => ['The provided credentials are incorrect.'],
+            'error' => ['Incorrect Password.'],
         ]);
     }
 

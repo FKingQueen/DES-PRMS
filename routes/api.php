@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +17,15 @@ use App\Http\Controllers\AuthController;
 |
 */
 Route::post('/login', [AuthController::class, 'login']);
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/regEmail', [AuthController::class, 'regEmail']);
-Route::middleware('auth:sanctum')->group(function () {
+
+Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
     Route::get('/getUser', [LoginController::class, 'getUser']);
     Route::post('/logout', [LoginController::class, 'logout']);
+    // Admin
+    Route::get('/getPersonnel', [AdminController::class, 'getPersonnel']);
     // Add other authenticated routes here
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

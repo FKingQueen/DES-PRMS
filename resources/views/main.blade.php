@@ -5,10 +5,11 @@
 
     <script src="{{ mix('js/app.js') }}" defer></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
 </head>
 <body>
     <div id="app">
-        <router-view></router-view>
     </div>
+    <script src="{{mix('/js/app.js')}}"></script>
 </body>
 </html>
