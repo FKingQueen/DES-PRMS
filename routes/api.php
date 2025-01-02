@@ -26,6 +26,8 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
     Route::post('/logout', [LoginController::class, 'logout']);
     // Admin
     Route::get('/getPersonnel', [AdminController::class, 'getPersonnel']);
+    Route::post('/storePersonnel', [AdminController::class, 'storePersonnel']);
+    Route::post('/uploadPersonnelImage', [AdminController::class, 'uploadPersonnelImage']);
     // Add other authenticated routes here
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

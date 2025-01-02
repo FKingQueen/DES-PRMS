@@ -13,7 +13,7 @@
                             @click="handleOk">Submit</a-button>
                     </template>
                 </a-modal> -->
-                <NewPersonnel v-if="addPersonnel == true" class="w-full" />
+                <NewPersonnel v-if="addPersonnel == true" class="w-full" @value-emitted="handleValue"/>
                 <a-table :columns="columns" :data-source="data">
                     <template #expandedRowRender="{ record }">
                         <p style="margin: 0" class="w-full h-96">
@@ -156,17 +156,7 @@ export default defineComponent({
             state.searchText = '';
         };
         // modal
-        const loading = ref(false);
-        const open = ref(true);
         const addPersonnel = ref(false);
-        const addPersonnelModal = () => {
-            // open.value = true;
-            addPersonnel.value = true;
-            // addPersonnel
-        };
-        const handleOk = () => {
-            open.value = false;
-        };
 
         return {
             // datatable
@@ -177,12 +167,18 @@ export default defineComponent({
             handleSearch,
             handleReset,
             // modal
-            loading,
-            open,
-            addPersonnelModal,
-            handleOk,
             addPersonnel
         };
     },
+    methods: {
+        handleValue(value){
+            const thiss = this
+            thiss.addPersonnel = value
+        },
+        addPersonnelModal(){
+            const thiss = this
+            thiss.addPersonnel = true
+        }
+    }
 });
 </script>
