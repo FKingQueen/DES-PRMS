@@ -14,22 +14,22 @@ class AuthController extends Controller
     {
         // return $request;
         $request->validate([
-            'username' => 'required|username',
+            'employeeNumber' => 'required|employeeNumber',
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($request->only('username', 'password'))) {
+        if (Auth::attempt($request->only('employeeNumber', 'password'))) {
             $user = Auth::user();
             $token = $user->createToken('auth-token')->plainTextToken;
 
             return response()->json(['user' => $user, 'token' => $token]);
         }
-        // Check if the username exists in the database
-        $user = User::where('username', $request->username)->first();
+        // Check if the employeeNumber exists in the database
+        $user = User::where('employeeNumber', $request->employeeNumber)->first();
 
         if (!$user) {
             throw ValidationException::withMessages([
-                'error' => ['Username not found.'],
+                'error' => ['Employee Number not found.'],
             ]);
         }
 

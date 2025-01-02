@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Validator::extend('username', function ($attribute, $value, $parameters, $validator) {
+        Validator::extend('employeeNumber', function ($attribute, $value, $parameters, $validator) {
             return preg_match('/^[a-zA-Z0-9_-]+$/', $value);
         });
     }

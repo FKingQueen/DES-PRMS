@@ -7,16 +7,13 @@
             </div>
             <div class="border border-gray-500 p-2 w-full">
                 <a-button @click="addPersonnelModal" class="bg-gray-200 mb-2">Add Personnel</a-button>
-                <a-modal v-model:open="open" title="New Personnel" width="1000px" :closable="false" @ok="handleOk">
+                <!-- <a-modal v-model:open="open" title="New Personnel" width="1000px" :maskClosable="false" @ok="handleOk">
                     <template #footer>
-                        <a-button key="submit" class="bg-gray-200 mb-2" :loading="loading" @click="handleOk">Submit</a-button>
+                        <a-button key="submit" class="bg-gray-200 mb-2" :loading="loading"
+                            @click="handleOk">Submit</a-button>
                     </template>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                </a-modal>
+                </a-modal> -->
+                <NewPersonnel v-if="addPersonnel == true" class="w-full" />
                 <a-table :columns="columns" :data-source="data">
                     <template #expandedRowRender="{ record }">
                         <p style="margin: 0" class="w-full h-96">
@@ -73,11 +70,13 @@
 </template>
 
 <script>
+import NewPersonnel from './personnel/addPersonnel.vue';
 import { defineComponent, ref, reactive } from 'vue';
 import { SearchOutlined } from '@ant-design/icons-vue';
 export default defineComponent({
     components: {
-        SearchOutlined
+        SearchOutlined,
+        NewPersonnel,
     },
     setup() {
         // const data = ref([]); // Make `data` reactive
@@ -158,16 +157,15 @@ export default defineComponent({
         };
         // modal
         const loading = ref(false);
-        const open = ref(false);
+        const open = ref(true);
+        const addPersonnel = ref(false);
         const addPersonnelModal = () => {
-            open.value = true;
+            // open.value = true;
+            addPersonnel.value = true;
+            // addPersonnel
         };
         const handleOk = () => {
-            loading.value = true;
-            setTimeout(() => {
-                loading.value = false;
-                open.value = false;
-            }, 2000);
+            open.value = false;
         };
 
         return {
@@ -183,6 +181,7 @@ export default defineComponent({
             open,
             addPersonnelModal,
             handleOk,
+            addPersonnel
         };
     },
 });

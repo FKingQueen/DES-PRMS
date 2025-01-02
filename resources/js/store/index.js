@@ -39,6 +39,7 @@ const store = createStore({
                 await axios.get('/sanctum/csrf-cookie').then(response => {
                     axios.post('api/login', credentials)
                         .then(response => {
+                            console.log(response);
                             const token = response.data.token;
                             const userRole = response.data.user.role_id;
                             commit('login', { token, userRole });

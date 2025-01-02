@@ -19,8 +19,8 @@
             <div class=" w-full border">
                 <div class="pt-4 px-4">
                     <Form ref="loginForm" :model="loginForm" :rules="ruleInline" label-position="top">
-                        <FormItem label="Username" prop="username" class="w-full">
-                            <Input type="text" v-model="loginForm.username" placeholder="Username">
+                        <FormItem label="Employee Number" prop="employeeNumber" class="w-full">
+                            <Input type="text" v-model="loginForm.employeeNumber" placeholder="Employee Number">
                             <template #prepend>
                                 <Icon type="ios-person-outline"></Icon>
                             </template>
@@ -52,11 +52,11 @@ export default defineComponent({
     data() {
         return {
             loginForm: {
-                username: '',
+                employeeNumber: '',
                 password: ''
             },
             ruleInline: {
-                username: [
+                employeeNumber: [
                     { required: true, message: 'Please fill in the user name', trigger: 'blur' }
                 ],
                 password: [
@@ -73,7 +73,7 @@ export default defineComponent({
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     this.login({  // Now this.login should be available
-                        username: this.loginForm.username,
+                        employeeNumber: this.loginForm.employeeNumber,
                         password: this.loginForm.password
                     })
                 } else {
