@@ -7,13 +7,7 @@
             </div>
             <div class="border border-gray-500 p-2 w-full">
                 <a-button @click="addPersonnelModal" class="bg-gray-200 mb-2">Add Personnel</a-button>
-                <!-- <a-modal v-model:open="open" title="New Personnel" width="1000px" :maskClosable="false" @ok="handleOk">
-                    <template #footer>
-                        <a-button key="submit" class="bg-gray-200 mb-2" :loading="loading"
-                            @click="handleOk">Submit</a-button>
-                    </template>
-                </a-modal> -->
-                <NewPersonnel v-if="addPersonnel == true" class="w-full" @value-emitted="handleValue"/>
+                <NewPersonnel v-if="addPersonnel == true" class="w-full" @value-emitted="handleValue" />
                 <a-table :columns="columns" :data-source="data">
                     <template #expandedRowRender="{ record }">
                         <p style="margin: 0" class="w-full h-96">
@@ -44,7 +38,7 @@
                     <template #customFilterIcon="{ filtered }">
                         <search-outlined :style="{ color: filtered ? '#108ee9' : undefined }" />
                     </template>
-                    <template #bodyCell="{ text, column }">
+                    <template #bodyCell="{ text, column, record }">
                         <span v-if="state.searchText && state.searchedColumn === column.dataIndex">
                             <template v-for="(fragment, i) in text
                                 .toString()
@@ -56,6 +50,12 @@
                                 <template v-else>{{ fragment }}</template>
                             </template>
                         </span>
+                        <template v-if="column.key === 'role_id'">
+                            <span class="space-x-3">
+                                <p v-if="record.role_id == 1"> Admin</p>
+                                <p v-else>Personnel</p>
+                            </span>
+                        </template>
                         <template v-if="column.key === 'action'">
                             <span class="space-x-3">
                                 <a>Edit</a>
@@ -79,29 +79,13 @@ export default defineComponent({
         NewPersonnel,
     },
     setup() {
-        // const data = ref([]); // Make `data` reactive
-
-
-        // const fetchData = async () => {
-        //     const headers = {
-        //         Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        //     };
-        //     try {
-        //         const response = await axios.get('/api/admin/getPersonnel', { headers });
-        //         // Map the data to the expected format for DataTables
-        //     } catch (error) {
-        //         console.error('Error fetching data:', error);
-        //     }
-        // };
-
-        // // Fetch data on mount
-        // fetchData();|
+        const data = ref([]); // Make `data` reactive
 
         const columns = [
             {
                 title: 'Role',
-                dataIndex: 'role',
-                key: 'role',
+                dataIndex: 'role_id',
+                key: 'role_id',
                 fixed: true,
             },
             {
@@ -124,20 +108,7 @@ export default defineComponent({
                 width: 200,
             },
         ];
-        const data = [
-            {
-                key: 1,
-                role: 'Role',
-                name: 'Name',
-                description: 'Other Informantion should be included',
-            },
-            {
-                key: 2,
-                role: 'Role',
-                name: 'Name2',
-                description: 'Other Informantion should be included',
-            },
-        ];
+
         const state = reactive({
             searchText: '',
             searchedColumn: '',
@@ -170,15 +141,35 @@ export default defineComponent({
             addPersonnel
         };
     },
+    mounted(){
+        const thiss = this
+        thiss.fetchData();
+    },
     methods: {
-        handleValue(value){
+        handleValue(value) {
             const thiss = this
+            console.log('return: ', value);
             thiss.addPersonnel = value
         },
-        addPersonnelModal(){
+        addPersonnelModal() {
             const thiss = this
             thiss.addPersonnel = true
+        },
+        async fetchData() {
+            const thiss = this
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            };
+            try {
+                const response = await axios.get('/api/admin/getPersonnel', { headers });
+                // Map the data to the expected format for DataTables
+                console.log(response.data);
+                thiss.data = response.data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         }
+
     }
 });
 </script>
