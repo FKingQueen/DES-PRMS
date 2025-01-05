@@ -4,11 +4,10 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import axios from 'axios';
 import Antd from 'ant-design-vue';
-import 'ant-design-vue/dist/reset.css';
 import ViewUIPlus from 'view-ui-plus';
 import 'view-ui-plus/dist/styles/viewuiplus.css';
 import locale from 'view-ui-plus/dist/locale/en-US';
-import router from './router/index.js';
+import router from './router';
 
 require('./bootstrap');
 

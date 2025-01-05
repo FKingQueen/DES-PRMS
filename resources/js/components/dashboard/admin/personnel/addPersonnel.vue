@@ -183,7 +183,7 @@
                             <Input v-model="formValidate.teachingLoads" placeholder="Enter Teaching Loads"></Input>
                         </FormItem>
                     </div>
-                    
+
                 </div>
             </Form>
         </a-modal>
@@ -256,14 +256,18 @@ export default defineComponent({
                 position: '',
                 itemNumber: '',
                 employeeNumber: '',
+                dateOfBirth: '',
+                dateLastProAppointment: '',
                 datePermanency: '',
                 dateOrigAppointment: '',
                 homeAddress: '',
                 contactNumber: '',
+                gender: '',
                 emailAddress: '',
                 civilStatus: '',
                 religion: '',
                 majorSpecialization: '',
+                minor: '',
                 civilServiceEligibility: '',
                 highestEducationAttainment: '',
                 schoolRole: '',

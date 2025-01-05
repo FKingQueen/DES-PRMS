@@ -7,11 +7,12 @@
             </div>
             <div class="border border-gray-500 p-2 w-full">
                 <a-button @click="addPersonnelModal" class="bg-gray-200 mb-2">Add Personnel</a-button>
-                <NewPersonnel v-if="addPersonnel == true" class="w-full" @value-emitted="handleValue" />
-                <a-table :columns="columns" :data-source="data">
+                <NewPersonnel v-if="addPersonnel == true" class="w-full" @value-emitted="handleValueAddPersonnnel" />
+                <a-table :columns="columns" :data-source="data" :expanded-row-keys="expandedRowKeys" :row-key="record => record.id"
+                    @expand="handleExpand">
                     <template #expandedRowRender="{ record }">
-                        <p style="margin: 0" class="w-full h-96">
-                            {{ record.description }}
+                        <p style="margin: 0" class="w-full">
+                            <DisplayPersonnel class="w-full" :id="record.id" />
                         </p>
                     </template>
                     <template #expandColumnTitle>
@@ -38,7 +39,7 @@
                     <template #customFilterIcon="{ filtered }">
                         <search-outlined :style="{ color: filtered ? '#108ee9' : undefined }" />
                     </template>
-                    <template #bodyCell="{ text, column, record }">
+                    <template #bodyCell="{ text, column, record, index }">
                         <span v-if="state.searchText && state.searchedColumn === column.dataIndex">
                             <template v-for="(fragment, i) in text
                                 .toString()
@@ -58,30 +59,47 @@
                         </template>
                         <template v-if="column.key === 'action'">
                             <span class="space-x-3">
-                                <a>Edit</a>
-                                <a class="hover:text-red-500">Delete</a>
+                                <a @click="editPersonnelModal(record.id)">Edit</a>
+                                <a-divider type="vertical" />
+                                <a-popconfirm title="Sure to delete?" @confirm="remove(index)">
+                                    <a class="hover:text-red-500">Delete</a>
+                                </a-popconfirm>
                             </span>
+
                         </template>
                     </template>
                 </a-table>
             </div>
+            <EditPersonnel v-if="editPersonnel == true" class="w-full" :id="editID" @value-emitted="handleValueEditPersonnel" />
         </div>
     </div>
 </template>
 
 <script>
 import NewPersonnel from './personnel/addPersonnel.vue';
+import EditPersonnel from './personnel/editPersonnel.vue';
+import DisplayPersonnel from './personnel/displayPersonnel.vue';
 import { defineComponent, ref, reactive } from 'vue';
 import { SearchOutlined } from '@ant-design/icons-vue';
+import { notification } from 'ant-design-vue';
 export default defineComponent({
     components: {
         SearchOutlined,
         NewPersonnel,
+        EditPersonnel,
+        DisplayPersonnel
     },
     setup() {
         const data = ref([]); // Make `data` reactive
+        const expandedRowKeys = ref([]); // Track expanded rows
 
         const columns = [
+            {
+                title: 'ID',
+                dataIndex: 'id',
+                key: 'id',
+                width: 80,
+            },
             {
                 title: 'Role',
                 dataIndex: 'role_id',
@@ -128,6 +146,7 @@ export default defineComponent({
         };
         // modal
         const addPersonnel = ref(false);
+        const editPersonnel = ref(false);
 
         return {
             // datatable
@@ -138,22 +157,52 @@ export default defineComponent({
             handleSearch,
             handleReset,
             // modal
-            addPersonnel
+            addPersonnel,
+            editPersonnel,
+            editID: ref(''),
+            expandedRowKeys, // Expose expanded row keys
         };
     },
-    mounted(){
+    mounted() {
         const thiss = this
         thiss.fetchData();
     },
     methods: {
-        handleValue(value) {
+        remove(key) {
             const thiss = this
-            console.log('return: ', value);
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            };
+            axios.post(`/api/admin/deletePersonnel`, { id: this.data[key].id }, { headers })
+                .then(function (response) {
+                    thiss.data.splice(key, 1);
+                    notification.success({
+                        message: 'Notification',
+                        description: 'The Personnel is Successfully Deleted',
+                    });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        handleValueAddPersonnnel(value) {
+            const thiss = this
             thiss.addPersonnel = value
+        },
+        handleValueEditPersonnel(value) {
+            const thiss = this
+            thiss.editPersonnel = value
+            thiss.fetchData();
         },
         addPersonnelModal() {
             const thiss = this
             thiss.addPersonnel = true
+        },
+        editPersonnelModal(id) {
+            const thiss = this
+            thiss.editID = id
+            thiss.editPersonnel = true
         },
         async fetchData() {
             const thiss = this
@@ -168,7 +217,10 @@ export default defineComponent({
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
-        }
+        },
+        handleExpand(expanded, record) {
+            this.expandedRowKeys = expanded ? [record.id] : [];
+        },
 
     }
 });

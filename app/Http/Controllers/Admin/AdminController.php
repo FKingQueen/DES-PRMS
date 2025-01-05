@@ -8,12 +8,18 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
+use DB;
 
 class AdminController extends Controller
 {
     public function getPersonnel()
     {
         return User::orderBy('id', 'desc')->with('role')->get();
+    }
+
+    public function getOnePersonnel($id)
+    {
+        return User::where('id', $id)->get();
     }
 
     public function storePersonnel(Request $request){
@@ -89,4 +95,49 @@ class AdminController extends Controller
         }
         return;
     }
+
+    public function updatePersonnel(Request $request){
+        DB::table('users')
+        ->where('id', $request->id)
+        ->update([
+        'role_id' => $request->role_id,
+        'password' => Hash::make($request->employeeNumber),
+        'name' => $request->name,
+        'image' => $request->image,
+        'position' => $request->position,
+        'itemNumber' => $request->itemNumber,
+        'employeeNumber' => $request->employeeNumber,
+        'datePermanency' => Carbon::parse($request->datePermanency)->format('Y-m-d'),
+        'dateOrigAppointment' => Carbon::parse($request->dateOrigAppointment)->format('Y-m-d'),
+        'dateLastProAppointment' => Carbon::parse($request->dateLastProAppointment)->format('Y-m-d'),
+        'homeAddress' => $request->homeAddress,
+        'contactNumber' => $request->contactNumber,
+        'emailAddress' => $request->emailAddress,
+        'dateOfBirth' => Carbon::parse($request->dateOfBirth)->format('Y-m-d'),
+        'civilStatus' => $request->civilStatus,
+        'religion' => $request->religion,
+        'gender' => $request->gender,
+        'majorSpecialization' => $request->majorSpecialization,
+        'minor' => $request->minor,
+        'civilServiceEligibility' => $request->civilServiceEligibility,
+        'highestEducationAttainment' => $request->highestEducationAttainment,
+        'schoolRole' => $request->schoolRole,
+        'ggisbpno' => $request->ggisbpno,
+        'tin' => $request->tin,
+        'basicSalary' => $request->basicSalary,
+        'salaryGradeLevel' => $request->salaryGradeLevel,
+        'stepIncrement' => $request->stepIncrement,
+        'height' => $request->height,
+        'weight' => $request->weight,
+        'contactPerson' => $request->contactPerson,
+        'teachingLoads' => $request->teachingLoads,
+        ]);
+        return;
+    }
+
+    public function deletePersonnel(){
+        return;
+    }
+
+
 }

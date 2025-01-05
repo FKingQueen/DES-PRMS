@@ -29,6 +29,9 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
     Route::post('/storePersonnel', [AdminController::class, 'storePersonnel']);
     Route::post('/uploadPersonnelImage', [AdminController::class, 'uploadPersonnelImage']);
     Route::post('/deletePeronnelImage', [AdminController::class, 'deletePeronnelImage']);
+    Route::get('/getOnePersonnel/{id}', [AdminController::class, 'getOnePersonnel']);
+    Route::post('/updatePersonnel', [AdminController::class, 'updatePersonnel']);
+    Route::post('/deletePersonnel', [AdminController::class, 'deletePersonnel']);
     // Add other authenticated routes here
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
