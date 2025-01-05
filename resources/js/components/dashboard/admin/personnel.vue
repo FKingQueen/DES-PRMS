@@ -8,8 +8,8 @@
             <div class="border border-gray-500 p-2 w-full">
                 <a-button @click="addPersonnelModal" class="bg-gray-200 mb-2">Add Personnel</a-button>
                 <NewPersonnel v-if="addPersonnel == true" class="w-full" @value-emitted="handleValueAddPersonnnel" />
-                <a-table :columns="columns" :data-source="data" :expanded-row-keys="expandedRowKeys" :row-key="record => record.id"
-                    @expand="handleExpand">
+                <a-table :columns="columns" :data-source="data" :expanded-row-keys="expandedRowKeys"
+                    :row-key="record => record.id" @expand="handleExpand">
                     <template #expandedRowRender="{ record }">
                         <p style="margin: 0" class="w-full">
                             <DisplayPersonnel class="w-full" :id="record.id" />
@@ -61,16 +61,17 @@
                             <span class="space-x-3">
                                 <a @click="editPersonnelModal(record.id)">Edit</a>
                                 <a-divider type="vertical" />
-                                <a-popconfirm title="Sure to delete?" @confirm="remove(index)">
+                                <Poptip confirm title="Are you sure you want to delete this item?" @on-ok="remove(index)">
                                     <a class="hover:text-red-500">Delete</a>
-                                </a-popconfirm>
+                                </Poptip>
                             </span>
 
                         </template>
                     </template>
                 </a-table>
             </div>
-            <EditPersonnel v-if="editPersonnel == true" class="w-full" :id="editID" @value-emitted="handleValueEditPersonnel" />
+            <EditPersonnel v-if="editPersonnel == true" class="w-full" :id="editID"
+                @value-emitted="handleValueEditPersonnel" />
         </div>
     </div>
 </template>

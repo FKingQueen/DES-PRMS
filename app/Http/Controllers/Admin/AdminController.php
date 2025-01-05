@@ -135,7 +135,15 @@ class AdminController extends Controller
         return;
     }
 
-    public function deletePersonnel(){
+    public function deletePersonnel(Request $ruquest){
+        $User = User::find($ruquest->id);
+
+        $fileName = $User->image;
+        $filePath = public_path().'/img/personnel/'.$fileName;
+        if(file_exists($filePath)){
+            @unlink($filePath);
+        }
+        $User->delete();
         return;
     }
 
