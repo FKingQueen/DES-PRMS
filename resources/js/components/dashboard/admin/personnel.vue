@@ -1,13 +1,25 @@
 <template>
-    <div class="w-full flex justify-center">
-        <div class="w-1/2">
+    <div class="w-full flex justify-around space-x-5">
+        <div class="w-2/5">
+            <div class="flex justify-between items-center">
+                <p class="text-blue-500 font-semibold blur-none tracking-wide antialiased font-roboto text-base py-2">
+                    Personnel Leave Application</p>
+            </div>
+            <div class="border border-gray-500 p-2 w-full">
+                <p>
+                    <LeaveApplication class="w-full"/>
+                </p>
+            </div>
+        </div>
+        <div class="w-3/5">
             <div class="flex justify-between items-center">
                 <p class="text-blue-500 font-semibold blur-none tracking-wide antialiased font-roboto text-base ">
                     Personnel Management</p>
+                    <a-button @click="addPersonnelModal" class="bg-gray-200 mb-2">Add Personnel</a-button>
+                <NewPersonnel v-if="addPersonnel == true" class="w-full" @value-emitted="handleValueAddPersonnnel" />
             </div>
             <div class="border border-gray-500 p-2 w-full">
-                <a-button @click="addPersonnelModal" class="bg-gray-200 mb-2">Add Personnel</a-button>
-                <NewPersonnel v-if="addPersonnel == true" class="w-full" @value-emitted="handleValueAddPersonnnel" />
+                
                 <a-table :columns="columns" :data-source="data" :expanded-row-keys="expandedRowKeys"
                     :row-key="record => record.id" @expand="handleExpand">
                     <template #expandedRowRender="{ record }">
@@ -61,7 +73,8 @@
                             <span class="space-x-3">
                                 <a @click="editPersonnelModal(record.id)">Edit</a>
                                 <a-divider type="vertical" />
-                                <Poptip confirm title="Are you sure you want to delete this item?" @on-ok="remove(index)">
+                                <Poptip confirm title="Are you sure you want to delete this item?"
+                                    @on-ok="remove(index)">
                                     <a class="hover:text-red-500">Delete</a>
                                 </Poptip>
                             </span>
@@ -73,6 +86,7 @@
             <EditPersonnel v-if="editPersonnel == true" class="w-full" :id="editID"
                 @value-emitted="handleValueEditPersonnel" />
         </div>
+
     </div>
 </template>
 
@@ -80,6 +94,7 @@
 import NewPersonnel from './personnel/addPersonnel.vue';
 import EditPersonnel from './personnel/editPersonnel.vue';
 import DisplayPersonnel from './personnel/displayPersonnel.vue';
+import LeaveApplication from './personnel/leaveApplication.vue';
 import { defineComponent, ref, reactive } from 'vue';
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { notification } from 'ant-design-vue';
@@ -88,19 +103,14 @@ export default defineComponent({
         SearchOutlined,
         NewPersonnel,
         EditPersonnel,
-        DisplayPersonnel
+        DisplayPersonnel,
+        LeaveApplication
     },
     setup() {
         const data = ref([]); // Make `data` reactive
         const expandedRowKeys = ref([]); // Track expanded rows
 
         const columns = [
-            {
-                title: 'ID',
-                dataIndex: 'id',
-                key: 'id',
-                width: 80,
-            },
             {
                 title: 'Role',
                 dataIndex: 'role_id',
@@ -190,6 +200,7 @@ export default defineComponent({
         handleValueAddPersonnnel(value) {
             const thiss = this
             thiss.addPersonnel = value
+            thiss.fetchData();
         },
         handleValueEditPersonnel(value) {
             const thiss = this
@@ -213,7 +224,6 @@ export default defineComponent({
             try {
                 const response = await axios.get('/api/admin/getPersonnel', { headers });
                 // Map the data to the expected format for DataTables
-                console.log(response.data);
                 thiss.data = response.data
             } catch (error) {
                 console.error('Error fetching data:', error);

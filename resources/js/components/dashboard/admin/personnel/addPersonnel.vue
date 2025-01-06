@@ -389,7 +389,6 @@ export default defineComponent({
                                 message: 'Notification',
                                 description: 'New Personnel is Successfully Created',
                             });
-                            console.log(response.data);
                             thiss.open = false
                             thiss.$emit("value-emitted", false); // Emit the value
                         })
@@ -409,11 +408,8 @@ export default defineComponent({
         },
         handleSuccess(res, file) {
             this.formValidate.image = res
-            console.log('res: ', res);
-            console.log('file: ', file);
         },
         handleError(res, file) {
-            console.log('res', res);
         },
         handleFormatError(file) {
             notification.warning({

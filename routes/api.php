@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\LeaveApplicationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,7 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
     Route::get('/getUser', [LoginController::class, 'getUser']);
     Route::post('/logout', [LoginController::class, 'logout']);
     // Admin
+    // Personnel
     Route::get('/getPersonnel', [AdminController::class, 'getPersonnel']);
     Route::post('/storePersonnel', [AdminController::class, 'storePersonnel']);
     Route::post('/uploadPersonnelImage', [AdminController::class, 'uploadPersonnelImage']);
@@ -32,7 +34,10 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
     Route::get('/getOnePersonnel/{id}', [AdminController::class, 'getOnePersonnel']);
     Route::post('/updatePersonnel', [AdminController::class, 'updatePersonnel']);
     Route::post('/deletePersonnel', [AdminController::class, 'deletePersonnel']);
-    // Add other authenticated routes here
+    // Leave Application
+    Route::get('/getLeaveApplications', [LeaveApplicationController::class, 'getLeaveApplications']);
+    Route::post('/storeLeaveApplication', [LeaveApplicationController::class, 'storeLeaveApplication']);
+
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

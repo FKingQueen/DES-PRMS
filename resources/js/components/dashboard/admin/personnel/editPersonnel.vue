@@ -411,11 +411,8 @@ export default defineComponent({
         },
         handleSuccess(res, file) {
             this.formValidate.image = res
-            console.log('res: ', res);
-            console.log('file: ', file);
         },
         handleError(res, file) {
-            console.log('res', res);
         },
         handleFormatError(file) {
             notification.warning({
@@ -446,7 +443,6 @@ export default defineComponent({
     },
     async mounted() {
         const thiss = this
-
         this.token = localStorage.getItem('authToken')
         const headers = {
             'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -460,8 +456,6 @@ export default defineComponent({
                         thiss.formValidate[key] = personnelData[key] || '';
                     }
                 });
-
-                console.log(thiss.formValidate);
             })
             .catch(function (error) {
                 console.log(error)

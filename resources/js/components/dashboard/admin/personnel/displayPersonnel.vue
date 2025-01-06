@@ -1,10 +1,10 @@
 <template>
     <div class="w-full flex justify-center border bg-white drop-shadow p-2">
         <div class="w-full">
-            <div class="flex  items-center">
+            <div class="flex justify-between">
                 <div>
                     <!-- {{ data.image }} -->
-                    <img class="object-cover w-full" :src="`/img/personnel/${data.image}`">
+                    <img class="object-cover w-40" :src="`/img/personnel/${data.image}`">
                     <div class="text-center font-semibold">
                         <p class="">
                             {{ data.name }}
@@ -14,30 +14,63 @@
                         </p>
                     </div>
                 </div>
-                <div class="ml-2 w-full space-y-2 text-sm font-semibold text-gray-600 font-roboto ">
-                    <p>
-                        Item Number: {{ data.itemNumber }}
-                    </p>
-                    <p>
-                        Employee Number: {{ data.employeeNumber }}
-                    </p>
-                    <p>
-                        Date of Permanency: {{ data.datePermanency }}
-                    </p>
-                    <p>
-                        Date of Original Appointment: {{ data.dateOrigAppointment }}
-                    </p>
-                    <p>
-                        Date of Last Promotion/Appointment: {{ data.dateLastProAppointment }}
-                    </p>
+                <div class="flex items-center">
+                    <div class="ml-2 w-full space-y-2 text-sm  text-gray-600 font-roboto ">
+                        <p>
+                            Item Number: {{ data.itemNumber }}
+                        </p>
+                        <p>
+                            Employee Number: {{ data.employeeNumber }}
+                        </p>
+                        <p>
+                            Date of Permanency: {{ data.datePermanency }}
+                        </p>
+                        <p>
+                            Date of Original Appointment: {{ data.dateOrigAppointment }}
+                        </p>
+                        <p>
+                            Date of Last Promotion/Appointment: {{ data.dateLastProAppointment }}
+                        </p>
+                    </div>
                 </div>
+
                 <div>
-                    <a-button class="bg-gray-200 mb-2" size="small">Other Details</a-button>
-                    <a-button class="bg-gray-200 mb-2" size="small">Leave Credits</a-button>
+                    <a-button class="bg-gray-200 mb-2" size="small" @click="open = true">Leave Credits</a-button>
+                    <a-modal v-model:open="open" title="Application for Leave" width="500px" style="top: 100px"
+                        :maskClosable="false" @ok="handleOk('formValidate')">
+                        <template #footer>
+                            <a-button key="submit" class="bg-gray-200 mb-2" @click="handleOk('formValidate')"
+                                :loading="loading">Submit</a-button>
+                        </template>
+                        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-position="top"
+                            class="py-5 space-y-5">
+                            <FormItem label="Leave Category" prop="leaveCategory" class="p-0">
+                                <Select v-model="formValidate.leaveCategory" style="width:100%" placeholder="Leave Category">
+                                    <Option v-for="item in leaveCategoryOptions" :value="item.value" :key="item.value">
+                                        {{
+                                            item.label }}</Option>
+                                </Select>
+                            </FormItem>
+                            <FormItem label="No. of Days" prop="noOfDays">
+                                <Input v-model="formValidate.noOfDays" placeholder="Enter No. of Days"></Input>
+                            </FormItem>
+                            <FormItem label="Date Filed" prop="dateFiled">
+                                <DatePicker style="width:100%" type="date" placeholder="Select date"
+                                    v-model="formValidate.dateFiled">
+                                </DatePicker>
+                            </FormItem>
+                            <FormItem label="Date of Leave" prop="dateOfLeave">
+                                <DatePicker style="width:100%" type="date" placeholder="Select date"
+                                    v-model="formValidate.dateOfLeave">
+                                </DatePicker>
+                            </FormItem>
+
+                        </Form>
+                    </a-modal>
                 </div>
             </div>
-            <div class="flex items center space-x-2 text-sm font-semibold text-gray-600 font-roboto p-5">
-                <div class="w-1/2 space-y-2 text-sm font-semibold text-gray-600 font-roboto ">
+            <div class="flex items-center space-x-2 text-sm  text-gray-600 font-roboto p-5">
+                <div class="w-1/2 space-y-2 text-sm  text-gray-600 font-roboto ">
                     <p>
                         Home Address: {{ data.homeAddress }}
                     </p>
@@ -60,7 +93,7 @@
                         Age: {{ getAge(data.dateOfBirth) }}
                     </p>
                 </div>
-                <div class="w-1/2 space-y-2 text-sm font-semibold text-gray-600 font-roboto ">
+                <div class="w-1/2 space-y-2 text-sm  text-gray-600 font-roboto ">
                     <p>
                         Gender: {{ data.gender }}
                     </p>
@@ -81,7 +114,46 @@
                     </p>
                 </div>
             </div>
+            <div class="text-sm text-gray-600 font-roboto px-5 pt-3 space-y-2">
+                <p class="font-semibold">Personnel Other Details</p>
+                <div class="flex items-center space-x-2 ">
+                    <div class="space-y-2 w-1/2">
+                        <p>
+                            GGIS BP NO.: {{ data.ggisbpno }}
+                        </p>
+                        <p>
+                            TIN: {{ data.tin }}
+                        </p>
+                        <p>
+                            Basic Salary: {{ data.basicSalary }}
+                        </p>
+                        <p>
+                            Step Increment: {{ data.stepIncrement }}
+                        </p>
+                    </div>
+                    <div class="space-y-2 w-1/2">
+                        <p>
+                            Height: {{ data.height }}
+                        </p>
+                        <p>
+                            Weight: {{ data.weight }}
+                        </p>
+                        <p>
+                            Contact Person in Case of Emergency: {{ data.contactPerson }}
+                        </p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <p>
+                        Teaching Loads:
+                    </p>
+                    <div class="border p-2 border-black">
+                        {{ data.teachingLoads }}
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </template>
 
@@ -100,7 +172,9 @@ export default defineComponent({
     //     }
     // },
     data() {
+
         return {
+            open: ref(false),
             value: '',
             data: {
                 image: '',
@@ -133,7 +207,57 @@ export default defineComponent({
                 weight: '',
                 contactPerson: '',
                 teachingLoads: '',
-            }
+            },
+            loading: ref(false),
+            formValidate: {
+                id: '',
+                dateFiled: '',
+                leaveCategory: '',
+                noOfDays: '',
+                dateOfLeave: '',
+            },
+            ruleValidate: {
+                leaveCategory: [
+                    { required: true, message: 'The Leave Category cannot be empty', trigger: 'blur' }
+                ],
+                dateFiled: [
+                    { required: true, type: 'date', message: 'The Date Filed cannot be empty', trigger: 'blur' }
+                ],
+                noOfDays: [
+                    { required: true, message: 'The No. of Days cannot be empty', trigger: 'blur' }
+                ],
+                dateOfLeave: [
+                    { required: true, type: 'date', message: 'The Date of Leave cannot be empty', trigger: 'blur' }
+                ],
+            },
+            leaveCategoryOptions: ref([{
+                value: 'Vacation Leave (VL)',
+                label: 'Vacation Leave (VL)',
+            }, {
+                value: 'Sick Leave (SL)',
+                label: 'Sick Leave (SL)',
+            }, {
+                value: 'Special Leave Privileges (SLP)',
+                label: 'Special Leave Privileges (SLP)',
+            }, {
+                value: 'Maternity Leave',
+                label: 'Maternity Leave',
+            }, {
+                value: 'Paternity Leave',
+                label: 'Paternity Leave',
+            }, {
+                value: 'Parental Leave for Solo Parents',
+                label: 'Parental Leave for Solo Parents',
+            }, {
+                value: 'Rehabilitation Leave',
+                label: 'Rehabilitation Leave',
+            }, {
+                value: 'Study Leave',
+                label: 'Study Leave',
+            }, {
+                value: 'Terminal Leave',
+                label: 'Terminal Leave',
+            }]),
         }
     },
 
@@ -147,7 +271,35 @@ export default defineComponent({
                 age--;
             }
             return age;
-        }
+        },
+        async handleOk(name) {
+            const thiss = this
+
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            };
+            thiss.formValidate.id = thiss.id
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    axios.post(`/api/admin/storeLeaveApplication`, this.formValidate, { headers })
+                        .then(function (response) {
+                            notification.success({
+                                message: 'Notification',
+                                description: 'Leave Request Submitted Successfully',
+                            });
+                            thiss.open = false
+                        })
+                        .catch(function (error) {
+
+                        });
+
+                } else {
+
+                }
+            })
+
+        },
     },
     async mounted() {
         const thiss = this
