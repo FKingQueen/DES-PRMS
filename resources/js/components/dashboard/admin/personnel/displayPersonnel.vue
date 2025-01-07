@@ -35,38 +35,64 @@
                 </div>
 
                 <div>
-                    <a-button class="bg-gray-200 mb-2" size="small" @click="open = true">Leave Credits</a-button>
-                    <a-modal v-model:open="open" title="Application for Leave" width="500px" style="top: 100px"
-                        :maskClosable="false" @ok="handleOk('formValidate')">
-                        <template #footer>
-                            <a-button key="submit" class="bg-gray-200 mb-2" @click="handleOk('formValidate')"
-                                :loading="loading">Submit</a-button>
-                        </template>
-                        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-position="top"
-                            class="py-5 space-y-5">
-                            <FormItem label="Leave Category" prop="leaveCategory" class="p-0">
-                                <Select v-model="formValidate.leaveCategory" style="width:100%" placeholder="Leave Category">
-                                    <Option v-for="item in leaveCategoryOptions" :value="item.value" :key="item.value">
-                                        {{
-                                            item.label }}</Option>
-                                </Select>
-                            </FormItem>
-                            <FormItem label="No. of Days" prop="noOfDays">
-                                <Input v-model="formValidate.noOfDays" placeholder="Enter No. of Days"></Input>
-                            </FormItem>
-                            <FormItem label="Date Filed" prop="dateFiled">
-                                <DatePicker style="width:100%" type="date" placeholder="Select date"
-                                    v-model="formValidate.dateFiled">
-                                </DatePicker>
-                            </FormItem>
-                            <FormItem label="Date of Leave" prop="dateOfLeave">
-                                <DatePicker style="width:100%" type="date" placeholder="Select date"
-                                    v-model="formValidate.dateOfLeave">
-                                </DatePicker>
-                            </FormItem>
+                    <div class="w-full">
+                        <a-button class="bg-gray-200 mb-2 w-full" size="small" @click="openLA = true">Leave
+                            Credits</a-button>
+                        <a-modal v-model:open="openLA" title="Application for Leave" width="500px" style="top: 100px"
+                            :maskClosable="false" @ok="handleOkLA('formValidateLA')">
+                            <template #footer>
+                                <a-button key="submit" class="bg-gray-200 mb-2" @click="handleOkLA('formValidateLA')"
+                                    :loading="loading">Submit</a-button>
+                            </template>
+                            <Form ref="formValidateLA" :model="formValidateLA" :rules="ruleValidateLA"
+                                label-position="top" class="py-5 space-y-5">
+                                <FormItem label="Leave Category" prop="leaveCategory" class="p-0">
+                                    <Select v-model="formValidateLA.leaveCategory" style="width:100%"
+                                        placeholder="Leave Category">
+                                        <Option v-for="item in leaveCategoryOptions" :value="item.value"
+                                            :key="item.value">
+                                            {{
+                                                item.label }}</Option>
+                                    </Select>
+                                </FormItem>
+                                <FormItem label="No. of Days" prop="noOfDays">
+                                    <Input v-model="formValidateLA.noOfDays" placeholder="Enter No. of Days"></Input>
+                                </FormItem>
+                                <FormItem label="Date Filed" prop="dateFiled">
+                                    <DatePicker style="width:100%" type="date" placeholder="Select date"
+                                        v-model="formValidateLA.dateFiled">
+                                    </DatePicker>
+                                </FormItem>
+                                <FormItem label="Date of Leave" prop="dateOfLeave">
+                                    <DatePicker style="width:100%" type="date" placeholder="Select date"
+                                        v-model="formValidateLA.dateOfLeave">
+                                    </DatePicker>
+                                </FormItem>
 
-                        </Form>
-                    </a-modal>
+                            </Form>
+                        </a-modal>
+                    </div>
+                    <div class="w-full">
+                        <a-button class="bg-gray-200 mb-2 w-full" size="small" @click="openCP = true">Change
+                            Password</a-button>
+                        <a-modal v-model:open="openCP" title="Change Password" width="500px" style="top: 100px"
+                            :maskClosable="false" @ok="handleOkCP('formValidateCP')">
+                            <template #footer>
+                                <a-button key="submit" class="bg-gray-200 mb-2" @click="handleOkCP('formValidateCP')"
+                                    :loading="loading">Change Password</a-button>
+                            </template>
+                            <Form ref="formValidateCP" :model="formValidateCP" :rules="ruleValidateCP"
+                                label-position="top" class="py-5 space-y-5">
+                                <FormItem label="New Password" prop="passwd">
+                                    <Input type="password" v-model="formValidateCP.passwd" placeholder="New Password"></Input>
+                                </FormItem>
+                                <FormItem label="Confirm Password" prop="passwdCheck">
+                                    <Input type="password" v-model="formValidateCP.passwdCheck" placeholder="New Password"></Input>
+                                </FormItem>
+                            </Form>
+                        </a-modal>
+                    </div>
+
                 </div>
             </div>
             <div class="flex items-center space-x-2 text-sm  text-gray-600 font-roboto p-5">
@@ -147,7 +173,7 @@
                     <p>
                         Teaching Loads:
                     </p>
-                    <div class="border p-2 border-black">
+                    <div class="border p-2 shadow-md">
                         {{ data.teachingLoads }}
                     </div>
                 </div>
@@ -174,7 +200,7 @@ export default defineComponent({
     data() {
 
         return {
-            open: ref(false),
+            openLA: ref(false),
             value: '',
             data: {
                 image: '',
@@ -209,14 +235,14 @@ export default defineComponent({
                 teachingLoads: '',
             },
             loading: ref(false),
-            formValidate: {
+            formValidateLA: {
                 id: '',
                 dateFiled: '',
                 leaveCategory: '',
                 noOfDays: '',
                 dateOfLeave: '',
             },
-            ruleValidate: {
+            ruleValidateLALA: {
                 leaveCategory: [
                     { required: true, message: 'The Leave Category cannot be empty', trigger: 'blur' }
                 ],
@@ -258,6 +284,25 @@ export default defineComponent({
                 value: 'Terminal Leave',
                 label: 'Terminal Leave',
             }]),
+            openCP: ref(false),
+            formValidateCP: {
+                passwd: '',
+                passwdCheck: ''
+            },
+            ruleValidateCP: {
+                leaveCategory: [
+                    { required: true, message: 'The Leave Category cannot be empty', trigger: 'blur' }
+                ],
+                dateFiled: [
+                    { required: true, type: 'date', message: 'The Date Filed cannot be empty', trigger: 'blur' }
+                ],
+                noOfDays: [
+                    { required: true, message: 'The No. of Days cannot be empty', trigger: 'blur' }
+                ],
+                dateOfLeave: [
+                    { required: true, type: 'date', message: 'The Date of Leave cannot be empty', trigger: 'blur' }
+                ],
+            },
         }
     },
 
@@ -272,23 +317,24 @@ export default defineComponent({
             }
             return age;
         },
-        async handleOk(name) {
+        async handleOkLA(name) {
             const thiss = this
 
             const headers = {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
             };
-            thiss.formValidate.id = thiss.id
+            thiss.formValidateLA.id = thiss.id
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    axios.post(`/api/admin/storeLeaveApplication`, this.formValidate, { headers })
+                    axios.post(`/api/admin/storeLeaveApplication`, this.formValidateLA, { headers })
                         .then(function (response) {
                             notification.success({
                                 message: 'Notification',
                                 description: 'Leave Request Submitted Successfully',
                             });
-                            thiss.open = false
+                            thiss.$emit("value-emitted", true); // Emit the value
+                            thiss.openLA = false
                         })
                         .catch(function (error) {
 
@@ -298,7 +344,33 @@ export default defineComponent({
 
                 }
             })
+        },
+        async handleOkCP(name) {
+            const thiss = this
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            };
+            thiss.formValidateCP.id = thiss.id
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    axios.post(`/api/admin/updatePersonnelAccountPassword`, this.formValidateCP, { headers })
+                        .then(function (response) {
+                            notification.success({
+                                message: 'Notification',
+                                description: 'Password Successfully Changed',
+                            });
+                            thiss.$emit("value-emitted", true); // Emit the value
+                            thiss.openCP = false
+                        })
+                        .catch(function (error) {
 
+                        });
+
+                } else {
+
+                }
+            })
         },
     },
     async mounted() {

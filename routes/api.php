@@ -34,6 +34,8 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
     Route::get('/getOnePersonnel/{id}', [AdminController::class, 'getOnePersonnel']);
     Route::post('/updatePersonnel', [AdminController::class, 'updatePersonnel']);
     Route::post('/deletePersonnel', [AdminController::class, 'deletePersonnel']);
+    Route::post('/updatePersonnelAccountPassword', [AdminController::class, 'updatePersonnelAccountPassword']);
+
     // Leave Application
     Route::get('/getLeaveApplications', [LeaveApplicationController::class, 'getLeaveApplications']);
     Route::post('/storeLeaveApplication', [LeaveApplicationController::class, 'storeLeaveApplication']);

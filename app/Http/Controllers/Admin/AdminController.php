@@ -147,5 +147,16 @@ class AdminController extends Controller
         return;
     }
 
+    public function updatePersonnelAccountPassword(Request $request){
+
+        $password = bcrypt($request->passwd);
+        DB::table('users')
+        ->where('id', $request->id)
+        ->update([
+        'password' => $password
+        ]);
+        return $request;
+    }
+
 
 }
