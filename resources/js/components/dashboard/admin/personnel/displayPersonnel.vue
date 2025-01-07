@@ -242,7 +242,7 @@ export default defineComponent({
                 noOfDays: '',
                 dateOfLeave: '',
             },
-            ruleValidateLALA: {
+            ruleValidateLA: {
                 leaveCategory: [
                     { required: true, message: 'The Leave Category cannot be empty', trigger: 'blur' }
                 ],

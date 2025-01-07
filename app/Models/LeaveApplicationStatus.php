@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class LeaveApplicationStatus extends Model
 {
     use HasFactory;
+
+    public function leaveApplication()
+    {
+        return $this->hasMany(leaveApplication::class);
+    }
+    
 }

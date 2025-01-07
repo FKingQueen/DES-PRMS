@@ -119,9 +119,9 @@
                 <template v-if="column.key === 'action'">
                     <div class="flex items-center justify-center w-full">
                         <span class="space-x-3">
-                            <a @click="editPersonnelModal(record.id)">Accept</a>
+                            <a @click="acceptLA(record.id, 1)">Accept</a>
                             <a-divider type="vertical" />
-                            <a class="hover:text-red-500">Reject</a>
+                            <a @click="acceptLA(record.id, 2)" class="hover:text-red-500">Reject</a>
                         </span>
                     </div>
                 </template>
@@ -216,6 +216,7 @@ export default defineComponent({
     methods: {
         async fetchData() {
             const thiss = this;
+            this.data = [];
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             };
@@ -243,6 +244,21 @@ export default defineComponent({
         handleExpand(expanded, record) {
             this.expandedRowKeys = expanded ? [record.id] : [];
         },
+        async acceptLA(id, value) {
+            const thiss = this
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            };
+            await axios.post(`/api/admin/acceptLeaveApplication`, { id: id, value: value }, { headers })
+                .then(function (response) {
+                    console.log(response);
+                    thiss.fetchData();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
     },
 });
 </script>

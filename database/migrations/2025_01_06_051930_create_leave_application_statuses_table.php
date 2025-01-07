@@ -15,6 +15,7 @@ class CreateLeaveApplicationStatusesTable extends Migration
     {
         Schema::create('leave_application_statuses', function (Blueprint $table) {
             $table->id();
+            $table->string('status');
             $table->timestamps();
         });
     }

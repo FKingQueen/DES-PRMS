@@ -16,6 +16,7 @@ class CreateLeaveApplicationsTable extends Migration
         Schema::create('leave_applications', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->integer('leaveapplicationstatus_id');
             $table->string('leaveCategory')->nullable();
             $table->integer('noOfDays')->nullable();
             $table->date('dateFiled')->nullable();

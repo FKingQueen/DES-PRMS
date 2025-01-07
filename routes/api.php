@@ -39,6 +39,8 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
     // Leave Application
     Route::get('/getLeaveApplications', [LeaveApplicationController::class, 'getLeaveApplications']);
     Route::post('/storeLeaveApplication', [LeaveApplicationController::class, 'storeLeaveApplication']);
+    Route::post('/acceptLeaveApplication', [LeaveApplicationController::class, 'acceptLeaveApplication']);
+    Route::post('/acceptLeaveApplication', [LeaveApplicationController::class, 'acceptLeaveApplication']);
 
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

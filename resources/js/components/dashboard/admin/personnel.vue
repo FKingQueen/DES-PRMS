@@ -7,6 +7,7 @@
                 >
                     Personnel Leave Application
                 </p>
+                <a-button type="link">Check All Application</a-button>
             </div>
             <div class="border-2 border-gray-300 rounded p-2 w-full">
                 <p>
