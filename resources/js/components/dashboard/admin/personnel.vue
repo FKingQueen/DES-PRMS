@@ -7,7 +7,9 @@
                 >
                     Personnel Leave Application
                 </p>
-                <a-button type="link">Check All Application</a-button>
+                <a-button @click="allApplicationModal" type="link">Check All Application</a-button>
+
+                <DisplayAllApplication v-if="allApplication == true" class="w-full" @value-emitted="handleValueAllApplication"/>
             </div>
             <div class="border-2 border-gray-300 rounded p-2 w-full">
                 <p>
@@ -186,6 +188,7 @@ import NewPersonnel from "./personnel/addPersonnel.vue";
 import EditPersonnel from "./personnel/editPersonnel.vue";
 import DisplayPersonnel from "./personnel/displayPersonnel.vue";
 import LeaveApplication from "./personnel/leaveApplication.vue";
+import DisplayAllApplication from "./personnel/displayAllApplication.vue";
 import { defineComponent, ref, reactive } from "vue";
 import { SearchOutlined } from "@ant-design/icons-vue";
 import { notification } from "ant-design-vue";
@@ -196,6 +199,7 @@ export default defineComponent({
         EditPersonnel,
         DisplayPersonnel,
         LeaveApplication,
+        DisplayAllApplication
     },
     setup() {
         const data = ref([]); // Make `data` reactive
@@ -253,6 +257,8 @@ export default defineComponent({
         // modal
         const addPersonnel = ref(false);
         const editPersonnel = ref(false);
+        const allApplication = ref(false);
+
 
         return {
             // datatable
@@ -267,6 +273,7 @@ export default defineComponent({
             editPersonnel,
             editID: ref(""),
             expandedRowKeys, // Expose expanded row keys
+            allApplication,
         };
     },
     data() {
@@ -344,6 +351,14 @@ export default defineComponent({
         handleExpand(expanded, record) {
             this.expandedRowKeys = expanded ? [record.id] : [];
         },
+        allApplicationModal(){
+            const thiss = this;
+            thiss.allApplication = true;
+        },
+        handleValueAllApplication(value){
+            const thiss = this;
+            thiss.allApplication = value;
+        }
     },
 });
 </script>

@@ -39,7 +39,14 @@ class LeaveApplicationController extends Controller
             $leaveApplication->leaveapplicationstatus_id = 3;
             $leaveApplication->save();
         }
-        
+
         return $leaveApplication;
+    }
+
+    public function getAllApplications(){
+        return LeaveApplication::where('leaveapplicationstatus_id', '!=', 1)
+            ->orderBy('id', 'desc')
+            ->with('user')
+            ->get();
     }
 }
