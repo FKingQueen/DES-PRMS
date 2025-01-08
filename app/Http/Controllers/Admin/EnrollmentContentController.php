@@ -12,7 +12,7 @@ class EnrollmentContentController extends Controller
         $enrollmentContent = new EnrollmentContent;
         $enrollmentContent->content = $request->editorData;;
         $enrollmentContent->save();
-        return;
+        return $request;
     }
 
     public function getEnrollmentContent(){

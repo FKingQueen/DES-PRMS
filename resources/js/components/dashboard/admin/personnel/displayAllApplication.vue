@@ -20,7 +20,7 @@
                             No. of Days:
                             <span class="text-rose-700">{{ record.noOfDays }}</span>
                         </p>
-                        <p>Date of Leave {{ record.dateOfLeave }}</p>
+                        <p>Date of Leave: {{ record.dateOfLeave }} to {{ record.dateOfLeaveEnd }}</p>
                     </div>
                 </template>
                 <template #expandColumnTitle>
@@ -198,6 +198,12 @@ export default defineComponent({
                 console.log(response.data);
                 // Map the data to the expected format for DataTables
                 response.data.forEach((item, index) => {
+                    let result = new Date(item.dateOfLeave);
+                    result.setDate(result.getDate() + item.noOfDays);
+                    const year = result.getFullYear();
+                    const month = String(result.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                    const day = String(result.getDate()).padStart(2, '0');
+
                     thiss.data.push({
                         id: item.id,
                         position: item.user.position,
@@ -207,6 +213,7 @@ export default defineComponent({
                         noOfDays: item.noOfDays,
                         dateOfLeave: item.dateOfLeave,
                         status: item.leaveapplicationstatus_id,
+                        dateOfLeaveEnd: `${year}-${month}-${day}`,
                     });
                 });
             } catch (error) {

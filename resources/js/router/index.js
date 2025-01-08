@@ -15,6 +15,8 @@ import Home from '../components/dashboard/admin/home.vue'
 import PersonnelAdmin from '../components/dashboard/admin/personnel.vue'
 import Personnel from '../components/dashboard/personnel/personnel.vue'
 
+// Request Admin
+import RequestAdmin from '../components/dashboard/admin/request.vue'
 
 import Main from '../components/main.vue'
 
@@ -48,12 +50,20 @@ const routes = [
             path: 'main',
             component: Home ,
         },
+        // Admin
         {
             name: 'personnelAdmin',
             path: 'personnelAdmin',
             component: PersonnelAdmin,
             meta: { role: '1' }
         },
+        {
+            name: 'requestAdmin',
+            path: 'requestAdmin',
+            component: RequestAdmin,
+            meta: { role: '1' }
+        },
+        // Personnel
         {
             name: 'personnel',
             path: 'personnel',

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\LeaveApplicationController;
 use App\Http\Controllers\Admin\PersonnelController;
 use App\Http\Controllers\Admin\EnrollmentContentController;
+use App\Http\Controllers\Admin\RequestFormController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +22,8 @@ use App\Http\Controllers\Admin\EnrollmentContentController;
 */
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::get('/regEmail', [AuthController::class, 'regEmail']);
+// Request Form
+Route::post('/storeRequestForm', [RequestFormController::class, 'storeRequestForm']);
 
 Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
     Route::post('/logout', [LoginController::class, 'logout']);
@@ -43,6 +44,9 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
         Route::post('/acceptLeaveApplication', [LeaveApplicationController::class, 'acceptLeaveApplication']);
         Route::post('/acceptLeaveApplication', [LeaveApplicationController::class, 'acceptLeaveApplication']);
         Route::get('/getAllApplications', [LeaveApplicationController::class, 'getAllApplications']);
+
+        // Request Form
+        Route::get('/getAllRequest', [RequestFormController::class, 'getAllRequest']);
 
     // Personnel
         // Personnel

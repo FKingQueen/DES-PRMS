@@ -570,6 +570,9 @@ video {
 .w-full {
   width: 100%;
 }
+.w-2\/4 {
+  width: 50%;
+}
 .max-w-md {
   max-width: 28rem;
 }
@@ -587,6 +590,9 @@ video {
 }
 .items-center {
   align-items: center;
+}
+.justify-end {
+  justify-content: flex-end;
 }
 .justify-center {
   justify-content: center;
@@ -780,11 +786,11 @@ video {
 .font-bold {
   font-weight: 700;
 }
-.font-semibold {
-  font-weight: 600;
-}
 .font-medium {
   font-weight: 500;
+}
+.font-semibold {
+  font-weight: 600;
 }
 .uppercase {
   text-transform: uppercase;

@@ -290,17 +290,11 @@ export default defineComponent({
                 passwdCheck: ''
             },
             ruleValidateCP: {
-                leaveCategory: [
-                    { required: true, message: 'The Leave Category cannot be empty', trigger: 'blur' }
+                passwd: [
+                    { required: true, message: 'The Password cannot be empty', trigger: 'blur' }
                 ],
-                dateFiled: [
-                    { required: true, type: 'date', message: 'The Date Filed cannot be empty', trigger: 'blur' }
-                ],
-                noOfDays: [
-                    { required: true, message: 'The No. of Days cannot be empty', trigger: 'blur' }
-                ],
-                dateOfLeave: [
-                    { required: true, type: 'date', message: 'The Date of Leave cannot be empty', trigger: 'blur' }
+                passwdCheck: [
+                    { required: true, message: 'The Confirm Password cannot be empty', trigger: 'blur' }
                 ],
             },
         }

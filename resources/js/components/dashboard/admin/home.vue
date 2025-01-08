@@ -13,12 +13,14 @@
                     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-position="top"
                         class="py-5 space-y-3">
                         <FormItem label="Enrollment Content" prop="editorData">
-                            <ckeditor :editor="editor" v-model="formValidate.editorData" :config="editorConfig" placeholder="Write Content"></ckeditor>
+                            <ckeditor :editor="editor" v-model="formValidate.editorData" :config="editorConfig"
+                                placeholder="Write Content">
+                            </ckeditor>
                         </FormItem>
                     </Form>
                 </a-modal>
 
-                <a-button @click="open = true" type="link">Edit</a-button>
+                <a-button v-if="role == 1" @click="open = true" type="link">Edit</a-button>
             </div>
             <div class=" border-2 shadow-lg p-3 drop-shadow-lg">
                 <p v-html="this.data.content"
@@ -38,6 +40,7 @@ import { defineComponent, reactive, computed, ref } from 'vue';
 export default defineComponent({
     data() {
         return {
+            role: '',
             data: '',
             open: ref(false),
             editor: ClassicEditor,
@@ -63,6 +66,7 @@ export default defineComponent({
     },
     methods: {
         handleOk(name) {
+            const thiss = this
             this.open = false;
 
             const headers = {
@@ -73,12 +77,14 @@ export default defineComponent({
                 if (valid) {
                     axios.post(`/api/admin/storeEnrollmentContent`, this.formValidate, { headers })
                         .then(function (response) {
-                            console.log(response);
+                            console.log('test: ',response);
+                            thiss.fetchData()
                             notification.success({
                                 message: 'Notification',
                                 description: 'Enrollment Content Updated',
                             });
                             thiss.formValidate.editorData = ''
+
                         })
                         .catch(function (error) {
 
@@ -91,20 +97,24 @@ export default defineComponent({
         },
         onExit() {
             this.formValidate.editorData = ''
+            this.fetchData()
+        },
+        async fetchData() {
+            const thiss = this
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            };
+            try {
+                const response = await axios.get(`/api/admin/getEnrollmentContent`, { headers });
+                thiss.data = response.data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         }
     },
     async mounted() {
-        const thiss = this
-        const headers = {
-            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        };
-        try {
-            const response = await axios.get(`/api/admin/getEnrollmentContent`, { headers });
-            thiss.data = response.data
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-
+        this.fetchData()
+        this.role = localStorage.getItem('userRole')
     },
     created() {
 
