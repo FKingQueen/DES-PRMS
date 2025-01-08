@@ -2,15 +2,13 @@
     <div class="w-full flex justify-around space-x-5">
         <div class="w-2/5">
             <div class="flex justify-between items-center">
-                <p
-                    class="text-blue-900 font-semibold blur-none tracking-wide antialiased font-roboto text-base py-2"
-                >
+                <p class="text-blue-900 font-semibold blur-none tracking-wide antialiased font-roboto text-base py-2">
                     Personnel Leave Application
                 </p>
                 <a-button @click="allApplicationModal" type="link">Check All Application</a-button>
-
-                <DisplayAllApplication v-if="allApplication == true" class="w-full" @value-emitted="handleValueAllApplication"/>
             </div>
+            <DisplayAllApplication v-if="allApplication == true" class="w-full"
+                @value-emitted="handleValueAllApplication" />
             <div class="border-2 border-gray-300 rounded p-2 w-full">
                 <p>
                     <LeaveApplication class="w-full" :key="childKey" />
@@ -19,127 +17,87 @@
         </div>
         <div class="w-3/5">
             <div class="flex justify-between items-center">
-                <p
-                    class="text-blue-900 font-semibold blur-none tracking-wide antialiased font-roboto text-base"
-                >
+                <p class="text-blue-900 font-semibold blur-none tracking-wide antialiased font-roboto text-base">
                     Personnel Management
                 </p>
-                <a-button @click="addPersonnelModal" class="bg-gray-200 mb-2"
-                    >Add Personnel</a-button
-                >
-                <NewPersonnel
-                    v-if="addPersonnel == true"
-                    class="w-full"
-                    @value-emitted="handleValueAddPersonnnel"
-                />
+                <a-button @click="addPersonnelModal" class="bg-gray-200 mb-2">Add Personnel</a-button>
+
             </div>
+            <NewPersonnel v-if="addPersonnel == true" class="w-full" @value-emitted="handleValueAddPersonnnel" />
             <div class="border-2 border-gray-300 rounded p-2 w-full">
-                <a-table
-                    :columns="columns"
-                    :data-source="data"
-                    :expanded-row-keys="expandedRowKeys"
-                    :row-key="(record) => record.id"
-                    @expand="handleExpand"
-                >
+                <a-table :columns="columns" :data-source="data" :expanded-row-keys="expandedRowKeys"
+                    :row-key="(record) => record.id" @expand="handleExpand">
                     <template #expandedRowRender="{ record }">
                         <p style="margin: 0" class="w-full">
-                            <DisplayPersonnel class="w-full" :id="record.id" @value-emitted="handleValueLeaveApplication"/>
+                            <DisplayPersonnel class="w-full" :id="record.id" @value-emitted="handleValueLeaveApplication" />
                         </p>
                     </template>
                     <template #expandColumnTitle>
                         <span style="color: red">More</span>
                     </template>
-                    <template
-                        #customFilterDropdown="{
-                            setSelectedKeys,
-                            selectedKeys,
-                            confirm,
-                            clearFilters,
-                            column,
-                        }"
-                    >
+                    <template #customFilterDropdown="{
+                        setSelectedKeys,
+                        selectedKeys,
+                        confirm,
+                        clearFilters,
+                        column,
+                    }">
                         <div style="padding: 8px">
-                            <a-input
-                                ref="searchInput"
-                                :placeholder="`Search ${column.dataIndex}`"
-                                :value="selectedKeys[0]"
-                                style="
+                            <a-input ref="searchInput" :placeholder="`Search ${column.dataIndex}`"
+                                :value="selectedKeys[0]" style="
                                     width: 188px;
                                     margin-bottom: 8px;
                                     display: block;
-                                "
-                                @change="
-                                    (e) =>
-                                        setSelectedKeys(
-                                            e.target.value
-                                                ? [e.target.value]
-                                                : []
+                                " @change="(e) =>
+                                    setSelectedKeys(
+                                        e.target.value
+                                            ? [e.target.value]
+                                            : []
+                                    )
+                                    " @pressEnter="
+                                        handleSearch(
+                                            selectedKeys,
+                                            confirm,
+                                            column.dataIndex
                                         )
-                                "
-                                @pressEnter="
-                                    handleSearch(
-                                        selectedKeys,
-                                        confirm,
-                                        column.dataIndex
-                                    )
-                                "
-                            />
-                            <a-button
-                                type="primary"
-                                size="small"
-                                style="width: 90px; margin-right: 8px"
-                                @click="
-                                    handleSearch(
-                                        selectedKeys,
-                                        confirm,
-                                        column.dataIndex
-                                    )
-                                "
-                            >
+                                        " />
+                            <a-button type="primary" size="small" style="width: 90px; margin-right: 8px" @click="
+                                handleSearch(
+                                    selectedKeys,
+                                    confirm,
+                                    column.dataIndex
+                                )
+                                ">
                                 <template #icon>
                                     <SearchOutlined />
                                 </template>
                                 Search
                             </a-button>
-                            <a-button
-                                size="small"
-                                style="width: 90px"
-                                @click="handleReset(clearFilters)"
-                            >
+                            <a-button size="small" style="width: 90px" @click="handleReset(clearFilters)">
                                 Reset
                             </a-button>
                         </div>
                     </template>
                     <template #customFilterIcon="{ filtered }">
-                        <search-outlined
-                            :style="{ color: filtered ? '#108ee9' : undefined }"
-                        />
+                        <search-outlined :style="{ color: filtered ? '#108ee9' : undefined }" />
                     </template>
                     <template #bodyCell="{ text, column, record, index }">
-                        <span
-                            v-if="
-                                state.searchText &&
-                                state.searchedColumn === column.dataIndex
-                            "
-                        >
-                            <template
-                                v-for="(fragment, i) in text
-                                    .toString()
-                                    .split(
-                                        new RegExp(
-                                            `(?<=${state.searchText})|(?=${state.searchText})`,
-                                            'i'
-                                        )
-                                    )"
-                            >
-                                <mark
-                                    v-if="
-                                        fragment.toLowerCase() ===
-                                        state.searchText.toLowerCase()
-                                    "
-                                    :key="i"
-                                    class="highlight"
-                                >
+                        <span v-if="
+                            state.searchText &&
+                            state.searchedColumn === column.dataIndex
+                        ">
+                            <template v-for="(fragment, i) in text
+                                .toString()
+                                .split(
+                                    new RegExp(
+                                        `(?<=${state.searchText})|(?=${state.searchText})`,
+                                        'i'
+                                    )
+                                )">
+                                <mark v-if="
+                                    fragment.toLowerCase() ===
+                                    state.searchText.toLowerCase()
+                                " :key="i" class="highlight">
                                     {{ fragment }}
                                 </mark>
                                 <template v-else>{{ fragment }}</template>
@@ -152,19 +110,12 @@
                             </span>
                         </template>
                         <template v-if="column.key === 'action'">
-                            <div
-                                class="flex items-center justify-center w-full"
-                            >
+                            <div class="flex items-center justify-center w-full">
                                 <span class="space-x-3">
-                                    <a @click="editPersonnelModal(record.id)"
-                                        >Edit</a
-                                    >
+                                    <a @click="editPersonnelModal(record.id)">Edit</a>
                                     <a-divider type="vertical" />
-                                    <Poptip
-                                        confirm
-                                        title="Are you sure you want to delete this item?"
-                                        @on-ok="remove(index)"
-                                    >
+                                    <Poptip confirm title="Are you sure you want to delete this item?"
+                                        @on-ok="remove(index)">
                                         <a class="hover:text-red-500">Delete</a>
                                     </Poptip>
                                 </span>
@@ -173,12 +124,8 @@
                     </template>
                 </a-table>
             </div>
-            <EditPersonnel
-                v-if="editPersonnel == true"
-                class="w-full"
-                :id="editID"
-                @value-emitted="handleValueEditPersonnel"
-            />
+            <EditPersonnel v-if="editPersonnel == true" class="w-full" :id="editID"
+                @value-emitted="handleValueEditPersonnel" />
         </div>
     </div>
 </template>
@@ -286,8 +233,8 @@ export default defineComponent({
         thiss.fetchData();
     },
     methods: {
-        handleValueLeaveApplication(value){
-            if(value == true){
+        handleValueLeaveApplication(value) {
+            if (value == true) {
                 this.childKey += 1; // Increment key to force re-render
             }
         },
@@ -351,11 +298,11 @@ export default defineComponent({
         handleExpand(expanded, record) {
             this.expandedRowKeys = expanded ? [record.id] : [];
         },
-        allApplicationModal(){
+        allApplicationModal() {
             const thiss = this;
             thiss.allApplication = true;
         },
-        handleValueAllApplication(value){
+        handleValueAllApplication(value) {
             const thiss = this;
             thiss.allApplication = value;
         }

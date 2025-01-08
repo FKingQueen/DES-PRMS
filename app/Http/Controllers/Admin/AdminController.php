@@ -148,7 +148,6 @@ class AdminController extends Controller
     }
 
     public function updatePersonnelAccountPassword(Request $request){
-
         $password = bcrypt($request->passwd);
         DB::table('users')
         ->where('id', $request->id)

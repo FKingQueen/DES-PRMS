@@ -1,12 +1,7 @@
 <template>
     <div>
-        <a-table
-            :columns="columns"
-            :data-source="data"
-            :expanded-row-keys="expandedRowKeys"
-            :row-key="(record) => record.id"
-            @expand="handleExpand"
-        >
+        <a-table :columns="columns" :data-source="data" :expanded-row-keys="expandedRowKeys"
+            :row-key="(record) => record.id" @expand="handleExpand">
             <template #expandedRowRender="{ record }">
                 <!-- <p style="margin: 0" class="w-full">
                     {{ record.user.name }}
@@ -20,97 +15,69 @@
                         No. of Days:
                         <span class="text-rose-700">{{ record.noOfDays }}</span>
                     </p>
-                    <p>Date of Leave {{ record.dateOfLeave }}</p>
+                    <p>Date of Leave: {{ record.dateOfLeave }} to {{ record.dateOfLeaveEnd }}</p>
                 </div>
             </template>
             <template #expandColumnTitle>
                 <span style="color: red">More</span>
             </template>
-            <template
-                #customFilterDropdown="{
-                    setSelectedKeys,
-                    selectedKeys,
-                    confirm,
-                    clearFilters,
-                    column,
-                }"
-            >
+            <template #customFilterDropdown="{
+                setSelectedKeys,
+                selectedKeys,
+                confirm,
+                clearFilters,
+                column,
+            }">
                 <div style="padding: 8px">
-                    <a-input
-                        ref="searchInput"
-                        :placeholder="`Search ${column.dataIndex}`"
-                        :value="selectedKeys[0]"
-                        style="width: 188px; margin-bottom: 8px; display: block"
-                        @change="
-                            (e) =>
+                    <a-input ref="searchInput" :placeholder="`Search ${column.dataIndex}`" :value="selectedKeys[0]"
+                        style="width: 188px; margin-bottom: 8px; display: block" @change="(e) =>
                                 setSelectedKeys(
                                     e.target.value ? [e.target.value] : []
                                 )
-                        "
-                        @pressEnter="
+                            " @pressEnter="
                             handleSearch(
                                 selectedKeys,
                                 confirm,
                                 column.dataIndex
                             )
-                        "
-                    />
-                    <a-button
-                        type="primary"
-                        size="small"
-                        style="width: 90px; margin-right: 8px"
-                        @click="
-                            handleSearch(
-                                selectedKeys,
-                                confirm,
-                                column.dataIndex
-                            )
-                        "
-                    >
+                            " />
+                    <a-button type="primary" size="small" style="width: 90px; margin-right: 8px" @click="
+                        handleSearch(
+                            selectedKeys,
+                            confirm,
+                            column.dataIndex
+                        )
+                        ">
                         <template #icon>
                             <SearchOutlined />
                         </template>
                         Search
                     </a-button>
-                    <a-button
-                        size="small"
-                        style="width: 90px"
-                        @click="handleReset(clearFilters)"
-                    >
+                    <a-button size="small" style="width: 90px" @click="handleReset(clearFilters)">
                         Reset
                     </a-button>
                 </div>
             </template>
             <template #customFilterIcon="{ filtered }">
-                <search-outlined
-                    :style="{ color: filtered ? '#108ee9' : undefined }"
-                />
+                <search-outlined :style="{ color: filtered ? '#108ee9' : undefined }" />
             </template>
             <template #bodyCell="{ text, column, record, index }">
-                <span
-                    v-if="
-                        state.searchText &&
-                        state.searchedColumn === column.dataIndex
-                    "
-                >
-                    <template
-                        v-for="(fragment, i) in text
-                            .toString()
-                            .split(
-                                new RegExp(
-                                    `(?<=${state.searchText})|(?=${state.searchText})`,
-                                    'i'
-                                )
-                            )"
-                    >
-                        <mark
-                            v-if="
-                                fragment.toLowerCase() ===
-                                state.searchText.toLowerCase()
-                            "
-                            :key="i"
-                            class="highlight"
-                        >
+                <span v-if="
+                    state.searchText &&
+                    state.searchedColumn === column.dataIndex
+                ">
+                    <template v-for="(fragment, i) in text
+                        .toString()
+                        .split(
+                            new RegExp(
+                                `(?<=${state.searchText})|(?=${state.searchText})`,
+                                'i'
+                            )
+                        )">
+                        <mark v-if="
+                            fragment.toLowerCase() ===
+                            state.searchText.toLowerCase()
+                        " :key="i" class="highlight">
                             {{ fragment }}
                         </mark>
                         <template v-else>{{ fragment }}</template>
@@ -227,6 +194,12 @@ export default defineComponent({
                 );
                 // Map the data to the expected format for DataTables
                 response.data.forEach((item, index) => {
+                    let result = new Date(item.dateOfLeave);
+                    result.setDate(result.getDate() + item.noOfDays);
+                    const year = result.getFullYear();
+                    const month = String(result.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                    const day = String(result.getDate()).padStart(2, '0');
+
                     thiss.data.push({
                         id: item.id,
                         position: item.user.position,
@@ -235,12 +208,18 @@ export default defineComponent({
                         dateFiled: item.dateFiled,
                         noOfDays: item.noOfDays,
                         dateOfLeave: item.dateOfLeave,
+                        dateOfLeaveEnd: `${year}-${month}-${day}`,
                     });
                 });
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         },
+        // calculateDateOfLeaveEnd(item) {
+        //     const dateOfLeave = new Date(item.dateOfLeave);
+        //     const dateOfLeaveEnd = addDays(dateOfLeave, item.noOfDays);
+        //     return format(dateOfLeaveEnd, 'yyyy-MM-dd');
+        // },
         handleExpand(expanded, record) {
             this.expandedRowKeys = expanded ? [record.id] : [];
         },

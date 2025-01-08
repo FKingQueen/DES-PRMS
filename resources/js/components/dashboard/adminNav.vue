@@ -13,7 +13,11 @@
                         class="px-4 py-1 flex hover:bg-gray-300 hover:text-gray-900 text-black cursor-pointer blur-none tracking-wide antialiased font-roboto text-base ">
                         Main
                     </router-link>
-                    <router-link to="/dashboard/personnel"
+                    <router-link v-if="isAdminVisible" to="/dashboard/personnelAdmin"
+                        class="px-4 py-1 flex hover:bg-gray-300 hover:text-gray-900 text-black cursor-pointer blur-none tracking-wide antialiased font-roboto text-base ">
+                        Personnel
+                    </router-link>
+                    <router-link v-if="isPersonnelVisible" to="/dashboard/personnel"
                         class="px-4 py-1 flex hover:bg-gray-300 hover:text-gray-900 text-black cursor-pointer blur-none tracking-wide antialiased font-roboto text-base ">
                         Personnel
                     </router-link>
@@ -61,12 +65,11 @@ import { mapActions } from 'vuex';
 export default defineComponent({
     data() {
         return {
-            isEditorVisible: false,
+            isPersonnelVisible: false,
             isAdminVisible: false,
         }
     },
     watch: {
-
     },
     methods: {
         ...mapActions(['logout']),
@@ -77,7 +80,7 @@ export default defineComponent({
             thiss.isAdminVisible = true;
         }
         if (localStorage.getItem('userRole') == 2) {
-            thiss.isEditorVisible = true;
+            thiss.isPersonnelVisible = true;
         }
     }
 })

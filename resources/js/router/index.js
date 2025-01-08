@@ -12,7 +12,8 @@ import RequestForm from '../components/pages/requestForm.vue'
 // Dashboard
 import AdminNav from '../components/dashboard/adminNav.vue'
 import Home from '../components/dashboard/admin/home.vue'
-import Personnel from '../components/dashboard/admin/personnel.vue'
+import PersonnelAdmin from '../components/dashboard/admin/personnel.vue'
+import Personnel from '../components/dashboard/personnel/personnel.vue'
 
 
 import Main from '../components/main.vue'
@@ -48,9 +49,16 @@ const routes = [
             component: Home ,
         },
         {
+            name: 'personnelAdmin',
+            path: 'personnelAdmin',
+            component: PersonnelAdmin,
+            meta: { role: '1' }
+        },
+        {
             name: 'personnel',
             path: 'personnel',
             component: Personnel,
+            meta: { role: '2' }
         },
     ]
 },
