@@ -88,12 +88,24 @@
                                     <template v-else>{{ fragment }}</template>
                                 </template>
                             </span>
+                            <template v-if="column.key === 'status'">
+                                <a-tag v-if="record.requestformstatus_id == 1" color="success">Received</a-tag>
+                                <a-tag v-if="record.requestformstatus_id == 2" color="processing">
+                                    <template #icon>
+                                        <sync-outlined :spin="true" />
+                                    </template>
+                                    processing
+                                </a-tag>
+                                <a-tag v-if="record.requestformstatus_id == 1" color="success">Release</a-tag>
+                            </template>
                             <template v-if="column.key === 'action'">
                                 <div class="flex items-center justify-center w-full">
                                     <span class="space-x-3">
-                                        <a @click="acceptLA(record.id, 1)">Accept</a>
-                                        <a-divider type="vertical" />
-                                        <a @click="acceptLA(record.id, 2)" class="hover:text-red-500">Reject</a>
+                                        <a v-if="record.requestformstatus_id == 1"
+                                            @click="startProcess(record.id)">Start Proccess</a>
+
+                                        <a v-if="record.requestformstatus_id == 2"
+                                            @click="release(record.id)">Release</a>
                                     </span>
                                 </div>
                             </template>
@@ -107,12 +119,13 @@
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
-import { SearchOutlined } from "@ant-design/icons-vue";
+import { SearchOutlined, SyncOutlined, } from "@ant-design/icons-vue";
 
 export default defineComponent({
     name: 'AdminRequest',
     components: {
         SearchOutlined,
+        SyncOutlined,
     },
     setup() {
         const data = ref([]); // Make `data` reactive
@@ -155,6 +168,12 @@ export default defineComponent({
                     }
                 },
                 width: 175,
+            },
+            {
+                title: "Status",
+                dataIndex: "status",
+                key: "status",
+                width: 100,
             },
             {
                 title: "Action",
@@ -204,7 +223,7 @@ export default defineComponent({
                 Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             };
             try {
-                const response = await axios.get("/api/admin/getAllRequest", { headers } );
+                const response = await axios.get("/api/admin/getAllRequest", { headers });
                 console.log(response);
                 thiss.data = response.data;
             } catch (error) {
@@ -214,6 +233,36 @@ export default defineComponent({
         handleExpand(expanded, record) {
             this.expandedRowKeys = expanded ? [record.id] : [];
         },
+        async startProcess(id) {
+            const thiss = this
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            };
+            await axios.post(`/api/admin/startProcessRequestForm`, { id: id }, { headers })
+                .then(function (response) {
+                    console.log(response);
+                    thiss.fetchData();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        async release(id) {
+            const thiss = this
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            };
+            await axios.post(`/api/admin/releaseRequestForm`, { id: id }, { headers })
+                .then(function (response) {
+                    console.log(response);
+                    thiss.fetchData();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
     },
     mounted() {
         const thiss = this;

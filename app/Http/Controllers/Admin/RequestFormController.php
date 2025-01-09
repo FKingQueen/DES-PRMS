@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RequestForm;
 use Carbon\Carbon;
+use DB;
 
 
 class RequestFormController extends Controller
@@ -23,6 +24,7 @@ class RequestFormController extends Controller
         ]);
 
         $requestForm = new RequestForm();
+        $requestForm->requestformstatus_id = 1; 
         $requestForm->emailAddress = $request->emailAddress;
         $requestForm->date = Carbon::parse($request->date)->format('Y-m-d');
         $requestForm->nameOfRequester = $request->nameOfRequester;
@@ -42,5 +44,23 @@ class RequestFormController extends Controller
     public function getAllRequest() {
         $requestForm = RequestForm::all();
         return $requestForm;
+    }
+
+    public function startProcessRequestForm(Request $request) {
+        DB::table('request_forms')
+        ->where('id', $request->id)
+        ->update([
+        'requestformstatus_id' => 2,
+        ]);
+        return;
+    }
+
+    public function releaseRequestForm(Request $request) {
+        DB::table('request_forms')
+        ->where('id', $request->id)
+        ->update([
+        'requestformstatus_id' => 3,
+        ]);
+        return;
     }
 }

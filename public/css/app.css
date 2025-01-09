@@ -570,9 +570,6 @@ video {
 .w-full {
   width: 100%;
 }
-.w-2\/4 {
-  width: 50%;
-}
 .max-w-md {
   max-width: 28rem;
 }
@@ -922,10 +919,6 @@ video {
   }
 }
 @media (min-width: 1024px) {
-
-  .lg\:block {
-    display: block;
-  }
 
   .lg\:px-10 {
     padding-left: 2.5rem;

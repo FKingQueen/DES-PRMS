@@ -15,6 +15,7 @@ class CreateRequestFormsTable extends Migration
     {
         Schema::create('request_forms', function (Blueprint $table) {
             $table->id();
+            $table->integer('requestformstatus_id');
             $table->string('emailAddress');
             $table->date('date')->nullable();
             $table->string('nameOfRequester')->nullable();

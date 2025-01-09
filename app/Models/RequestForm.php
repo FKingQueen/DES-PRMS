@@ -19,4 +19,9 @@ class RequestForm extends Model
         'purpose',
         'documentCategory',
     ];
+
+    public function requestFormStatus()
+    {
+        return $this->belongsTo(RequestFormStatus::class);
+    }
 }
