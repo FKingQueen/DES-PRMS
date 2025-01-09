@@ -6,7 +6,10 @@
                     <p class="text-blue-900 font-semibold blur-none tracking-wide antialiased font-roboto text-base">
                         Request Management
                     </p>
+                    <a-button @click="completedRequestModal" type="link">Completed Request</a-button>
                 </div>
+                <DisplayCompletedRequest v-if="completedRequest == true" class="w-full"
+                @value-emitted="handleValueCompletedRequest" />
                 <div class="border-2 border-gray-300 rounded p-2 w-full">
                     <a-table :columns="columns" :data-source="data" :expanded-row-keys="expandedRowKeys"
                         :row-key="(record) => record.id" @expand="handleExpand">
@@ -89,23 +92,29 @@
                                 </template>
                             </span>
                             <template v-if="column.key === 'status'">
-                                <a-tag v-if="record.requestformstatus_id == 1" color="success">Received</a-tag>
-                                <a-tag v-if="record.requestformstatus_id == 2" color="processing">
-                                    <template #icon>
-                                        <sync-outlined :spin="true" />
-                                    </template>
-                                    processing
-                                </a-tag>
-                                <a-tag v-if="record.requestformstatus_id == 1" color="success">Release</a-tag>
+                                <div class="flex items-center justify-center w-full">
+                                    <a-tag v-if="record.requestformstatus_id == 1" color="error">Received</a-tag>
+                                    <a-tag v-if="record.requestformstatus_id == 2" color="processing">
+                                        <template #icon>
+                                            <sync-outlined :spin="true" />
+                                        </template>
+                                        processing
+                                    </a-tag>
+                                    <a-tag v-if="record.requestformstatus_id == 3" color="success">Ready for
+                                        Release</a-tag>
+                                </div>
+
                             </template>
                             <template v-if="column.key === 'action'">
-                                <div class="flex items-center justify-center w-full">
+                                <div class="flex items-center w-full">
                                     <span class="space-x-3">
                                         <a v-if="record.requestformstatus_id == 1"
-                                            @click="startProcess(record.id)">Start Proccess</a>
+                                            @click="startProcess(record.id)">Proccess</a>
 
                                         <a v-if="record.requestformstatus_id == 2"
-                                            @click="release(record.id)">Release</a>
+                                            @click="startPickUp(record.id)">Release</a>
+                                        <a v-if="record.requestformstatus_id == 3"
+                                            @click="release(record.id)">Taken/Picked Up</a>
                                     </span>
                                 </div>
                             </template>
@@ -120,12 +129,14 @@
 <script>
 import { defineComponent, ref, reactive } from "vue";
 import { SearchOutlined, SyncOutlined, } from "@ant-design/icons-vue";
+import DisplayCompletedRequest from "./request/displayCompletedRequest.vue";
 
 export default defineComponent({
     name: 'AdminRequest',
     components: {
         SearchOutlined,
         SyncOutlined,
+        DisplayCompletedRequest,
     },
     setup() {
         const data = ref([]); // Make `data` reactive
@@ -199,6 +210,7 @@ export default defineComponent({
             });
             state.searchText = "";
         };
+        const completedRequest  = ref(false);
 
         return {
             expandedRowKeys,
@@ -208,6 +220,7 @@ export default defineComponent({
             searchInput,
             handleSearch,
             handleReset,
+            completedRequest
         };
     },
     data() {
@@ -224,7 +237,6 @@ export default defineComponent({
             };
             try {
                 const response = await axios.get("/api/admin/getAllRequest", { headers });
-                console.log(response);
                 thiss.data = response.data;
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -248,13 +260,13 @@ export default defineComponent({
                     console.log(error);
                 });
         },
-        async release(id) {
+        async startPickUp(id) {
             const thiss = this
             const headers = {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
             };
-            await axios.post(`/api/admin/releaseRequestForm`, { id: id }, { headers })
+            await axios.post(`/api/admin/startPickUpRequestForm`, { id: id }, { headers })
                 .then(function (response) {
                     console.log(response);
                     thiss.fetchData();
@@ -262,6 +274,29 @@ export default defineComponent({
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+        async release(id) {
+            const thiss = this
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            };
+            await axios.post(`/api/admin/startReleasedRequestForm`, { id: id }, { headers })
+                .then(function (response) {
+                    console.log(response);
+                    thiss.fetchData();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        completedRequestModal() {
+            const thiss = this;
+            thiss.completedRequest = true;
+        },
+        handleValueCompletedRequest(value) {
+            const thiss = this;
+            thiss.completedRequest = value;
         }
     },
     mounted() {

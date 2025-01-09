@@ -48,7 +48,9 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
         // Request Form
         Route::get('/getAllRequest', [RequestFormController::class, 'getAllRequest']);
         Route::post('/startProcessRequestForm', [RequestFormController::class, 'startProcessRequestForm']);
-        Route::post('/releaseRequestForm', [RequestFormController::class, 'releaseRequestForm']);
+        Route::post('/startPickUpRequestForm', [RequestFormController::class, 'startPickUpRequestForm']);
+        Route::post('/startReleasedRequestForm', [RequestFormController::class, 'startReleasedRequestForm']);
+        Route::get('/getCompletedRequest', [RequestFormController::class, 'getCompletedRequest']);
 
     // Personnel
         // Personnel

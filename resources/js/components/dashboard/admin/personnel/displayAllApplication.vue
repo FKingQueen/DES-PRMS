@@ -1,9 +1,9 @@
 <template>
     <div>
         <a-modal v-model:open="open" title="All Leave Application" width="1000px" style="top: 20px"
-            :maskClosable="false" @ok="handleOk('formValidate')" @cancel="onExit">
+            :maskClosable="false" @ok="handleOk()" @cancel="onExit">
             <template #footer>
-                <a-button key="submit" class="bg-gray-200 mb-2" @click="handleOk('formValidate')">Close</a-button>
+                <a-button key="submit" class="bg-gray-200 mb-2" @click="handleOk()">Close</a-button>
             </template>
             <a-table :columns="columns" :data-source="data" :expanded-row-keys="expandedRowKeys"
                 :row-key="(record) => record.id" @expand="handleExpand">
@@ -238,7 +238,7 @@ export default defineComponent({
                     console.log(error);
                 });
         },
-        handleOk(name) {
+        handleOk() {
             const thiss = this
             thiss.$emit("value-emitted", false); // Emit the value
         },

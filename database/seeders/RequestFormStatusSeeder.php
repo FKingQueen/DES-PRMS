@@ -21,6 +21,9 @@ class RequestFormStatusSeeder extends Seeder
             'status' => 'Processing',
         ]);
         DB::table('request_form_statuses')->insert([
+            'status' => 'PickUp',
+        ]);
+        DB::table('request_form_statuses')->insert([
             'status' => 'Released',
         ]);
     }
