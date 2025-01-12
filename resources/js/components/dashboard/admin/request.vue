@@ -123,6 +123,18 @@
                 </div>
             </div>
         </div>
+        <Modal v-model="loadingModal" width="360" :closable="false" :mask-closable="false">
+            <template #header>
+                Please Wait
+            </template>
+            <div style="text-align:center">
+                <p>The organization will send an email to the requester. Please wait while the system processes and sends the email. Check the organization's email for confirmation</p>
+            </div>
+            <template #footer>
+                <Button v-if="loadingModal_loading" type="success" size="large" long @click="loadingRequest()" :loading="loadingModal_loading">Loading</Button>
+                <Button v-if="!loadingModal_loading" type="success" size="large" long @click="loadingRequest()" :loading="loadingModal_loading">Done</Button>
+            </template>
+        </Modal>
     </div>
 </template>
 
@@ -226,6 +238,9 @@ export default defineComponent({
     data() {
         return {
             // Your component data goes here
+            loadingModal: false,
+            loadingModal_loading: true,
+
         };
     },
     methods: {
@@ -245,16 +260,22 @@ export default defineComponent({
         handleExpand(expanded, record) {
             this.expandedRowKeys = expanded ? [record.id] : [];
         },
+        loadingRequest(){
+            const thiss = this;
+            thiss.loadingModal = false;
+        },
         async startProcess(id) {
             const thiss = this
             const headers = {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
             };
+            thiss.loadingModal = true;
             await axios.post(`/api/admin/startProcessRequestForm`, { id: id }, { headers })
                 .then(function (response) {
                     console.log(response);
                     thiss.fetchData();
+                    thiss.loadingModal_loading = false
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -266,10 +287,12 @@ export default defineComponent({
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
             };
+            thiss.loadingModal = true;
             await axios.post(`/api/admin/startPickUpRequestForm`, { id: id }, { headers })
                 .then(function (response) {
                     console.log(response);
                     thiss.fetchData();
+                    thiss.loadingModal_loading = false
                 })
                 .catch(function (error) {
                     console.log(error);

@@ -18,6 +18,9 @@ import Personnel from '../components/dashboard/personnel/personnel.vue'
 // Request Admin
 import RequestAdmin from '../components/dashboard/admin/request.vue'
 
+// Records
+import RecordsAdmin from '../components/dashboard/admin/records.vue'
+
 import Main from '../components/main.vue'
 
 const routes = [
@@ -61,6 +64,12 @@ const routes = [
             name: 'requestAdmin',
             path: 'requestAdmin',
             component: RequestAdmin,
+            meta: { role: '1' }
+        },
+        {
+            name: 'recordsAdmin',
+            path: 'recordsAdmin',
+            component: RecordsAdmin,
             meta: { role: '1' }
         },
         // Personnel

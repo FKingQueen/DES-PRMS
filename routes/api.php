@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\LeaveApplicationController;
 use App\Http\Controllers\Admin\PersonnelController;
 use App\Http\Controllers\Admin\EnrollmentContentController;
 use App\Http\Controllers\Admin\RequestFormController;
+use App\Http\Controllers\Admin\RecordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,9 +53,18 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
         Route::post('/startReleasedRequestForm', [RequestFormController::class, 'startReleasedRequestForm']);
         Route::get('/getCompletedRequest', [RequestFormController::class, 'getCompletedRequest']);
 
+        // Records
+        Route::post('/uploadRecordDocument', [RecordController::class, 'uploadRecordDocument']);
+        Route::post('/deleteRecordDocument', [RecordController::class, 'deleteRecordDocument']);
+        Route::get('/getDocuments', [RecordController::class, 'getDocuments']);
+        Route::get('/downloadDocument/{id}', [RecordController::class, 'downloadDocument']);
+
+
+
     // Personnel
         // Personnel
         Route::get('/getUserPersonnel', [PersonnelController::class, 'getUserPersonnel']);
+
     // Main
         Route::post('/storeEnrollmentContent', [EnrollmentContentController::class, 'storeEnrollmentContent']);
         Route::get('/getEnrollmentContent', [EnrollmentContentController::class, 'getEnrollmentContent']);

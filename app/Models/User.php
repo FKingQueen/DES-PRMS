@@ -80,4 +80,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(LeaveApplication::class);
     }
+
+    public function document()
+    {
+        return $this->hasMany(Document::class);
+    }
 }
