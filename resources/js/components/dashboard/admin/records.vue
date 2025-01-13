@@ -31,7 +31,7 @@
                                     <tr v-for="doc in record.document">
                                         <td
                                             class="px-6 py-2 whitespace-nowrap border-b border-gray-300 cursor-pointer hover:underline">
-                                            <a @click="downloadDocument(doc.id)">{{ doc.fileName.replace("-" +
+                                            <a @click="downloadDocument(doc.id)">{{ doc.fileName.replace(" - " +
                                                 record.name, "") }}</a>
 
                                         </td>

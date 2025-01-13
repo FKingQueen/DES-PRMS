@@ -24,7 +24,7 @@ class RecordController extends Controller
             if (!$user) {
                 return response()->json(['error' => 'User not found'], 404);
             }
-            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '-' . $user->name . '.' . $file->getClientOriginalExtension();
+            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . ' - ' . $user->name . '.' . $file->getClientOriginalExtension();
 
             $directory = 'records/';
             $file->move(public_path($directory), $filename);
@@ -90,6 +90,19 @@ class RecordController extends Controller
             return response()->download($filePath, $document->fileName);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to download document', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function searchArticle(Request $request){
+        try {
+            $documents = Document::where('fileName', 'LIKE', "%{$request->search}%")
+                ->where('user_id', auth()->id())
+                ->orderBy('created_at')
+                ->with('user')
+                ->get();
+            return response()->json($documents);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to search documents', 'message' => $e->getMessage()], 500);
         }
     }
 }

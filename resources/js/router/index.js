@@ -18,8 +18,11 @@ import Personnel from '../components/dashboard/personnel/personnel.vue'
 // Request Admin
 import RequestAdmin from '../components/dashboard/admin/request.vue'
 
-// Records
+// Records Admin
 import RecordsAdmin from '../components/dashboard/admin/records.vue'
+
+// Records Personnel
+import Records from '../components/dashboard/personnel/records.vue'
 
 import Main from '../components/main.vue'
 
@@ -79,6 +82,13 @@ const routes = [
             component: Personnel,
             meta: { role: '2' }
         },
+        {
+            name: 'records',
+            path: 'records',
+            component: Records,
+            meta: { role: '2' }
+        },
+
     ]
 },
 ]

@@ -1,23 +1,21 @@
 <template>
-    <div>
-        <button @click="$router.go(-1)">
-            Back
-        </button>
-    </div>
-    <div class="w-full flex items-center justify-center" :style="minHeightStyle">
-        <div class="w-1/4">
+ <div 
+    class="w-full flex items-center justify-center bg-cover bg-center bg-no-repeat h-screen" 
+    :style="{ backgroundImage: 'url(/img/background/matatag.png)' }"
+  >
+        <div class="w-1/4 bg-white p-5">
             <div class="pb-2">
-                <p class="font-semibold text-center text-4xl">
+                <p @click="$router.push('/')"  class="font-semibold text-center text-4xl cursor-pointer">
                     DES – PRMS
                 </p>
             </div>
             <div>
-                <p class="text-start pl-2 text-lg">
+                <p class="text-start pl-2 text-base">
                     User Login
                 </p>
             </div>
-            <div class=" w-full border">
-                <div class="pt-4 px-4">
+            <div class="w-full border rounded">
+                <div class="pt-4 pb-0 px-4">
                     <Form ref="loginForm" :model="loginForm" :rules="ruleInline" label-position="top">
                         <FormItem label="Employee Number" prop="employeeNumber" class="w-full">
                             <Input type="text" v-model="loginForm.employeeNumber" placeholder="Employee Number">
@@ -33,10 +31,14 @@
                             </template>
                             </Input>
                         </FormItem>
-                        <FormItem>
+                        <FormItem class="w-full flex justify-end">
                             <Button type="primary" @click="handleSubmit('loginForm')">Login</Button>
                         </FormItem>
                     </Form>
+                </div>
+                <div class="text-center">
+                    <p>
+                        "Fostering relevant, resilient and equitable education Through DES (Dedicated and Efficient Service)"                    </p>
                 </div>
             </div>
         </div>
@@ -88,6 +90,14 @@ export default defineComponent({
                 minHeight: `${this.screenHeight}px`
             }
         },
+        backgroundStyle() {
+            return {
+                backgroundImage: "url('/img/background/matatag.png')",
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+            }
+        }
     }
 });
 </script>

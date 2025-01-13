@@ -25,7 +25,11 @@
                         class="px-4 py-1 flex hover:bg-gray-300 hover:text-gray-900 text-black cursor-pointer blur-none tracking-wide antialiased font-roboto text-base ">
                         Request
                     </router-link>
-                    <router-link to="/dashboard/recordsAdmin"
+                    <router-link v-if="isAdminVisible" to="/dashboard/recordsAdmin"
+                        class="px-4 py-1 flex hover:bg-gray-300 hover:text-gray-900 text-black cursor-pointer blur-none tracking-wide antialiased font-roboto text-base ">
+                        Records
+                    </router-link>
+                    <router-link v-if="isPersonnelVisible" to="/dashboard/records"
                         class="px-4 py-1 flex hover:bg-gray-300 hover:text-gray-900 text-black cursor-pointer blur-none tracking-wide antialiased font-roboto text-base ">
                         Records
                     </router-link>

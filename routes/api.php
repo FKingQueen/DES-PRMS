@@ -58,12 +58,16 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
         Route::post('/deleteRecordDocument', [RecordController::class, 'deleteRecordDocument']);
         Route::get('/getDocuments', [RecordController::class, 'getDocuments']);
         Route::get('/downloadDocument/{id}', [RecordController::class, 'downloadDocument']);
+        
 
 
 
     // Personnel
         // Personnel
         Route::get('/getUserPersonnel', [PersonnelController::class, 'getUserPersonnel']);
+
+        // Records
+        Route::post('/searchArticle', [RecordController::class, 'searchArticle']);
 
     // Main
         Route::post('/storeEnrollmentContent', [EnrollmentContentController::class, 'storeEnrollmentContent']);

@@ -3,7 +3,7 @@
 
         <div class="w-1/4 ">
             <div class="pb-2">
-                <p class="font-semibold text-start text-4xl">
+                <p @click="$router.push('/')"  class="font-semibold text-start text-4xl">
                     DES – PRMS
                 </p>
             </div>

@@ -1,11 +1,6 @@
 <template>
-    <div>
-        <button @click="$router.go(-1)">
-            Back
-        </button>
-    </div>
     <div class="w-full flex items-center justify-center" :style="minHeightStyle">
-        <div class="w-1/4">
+        <div class="w-2/4 p-10">
             <Alert v-if="requestFormSuccess" type="success" show-icon>
                 Success!
                 <template #desc>Your request form is being processed by the administrator. A notification will be sent
@@ -17,7 +12,7 @@
                     Request Form
                 </p>
 
-                <p class="font-semibold text-start text-2xl">
+                <p @click="$router.push('/')"  class="cursor-pointer font-semibold text-start text-2xl">
                     DES – PRMS
                 </p>
             </div>
